@@ -252,6 +252,13 @@ Here's an example of what your site should look like when all functionality is w
 
 [example finished site](READMEimages/example-end.png)
 
-## Submitting Your Code
+## Submitting Your Code & Prizes
 
 Simply push your code to the forked repo you created when you set up the project. Then you're done!
+
+Additionally, there are prizes (in the form of delicious C-store candy/chocolate bars) for:
+
+1. The person to successfully nominate the first pokemon
+2. The person who nominated the pokemon with the most votes (1st)
+3. The person who nominated the pokemon with the 2nd most votes
+4. The person who nominated the pokemon with the 3rd most votes
