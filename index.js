@@ -41,7 +41,12 @@ const URL = production;
  * @key - string - pokemon name
  * @value - number - number of votes the user has committed
  */
-let myVotes = new Map();
+let _myVotes = new Map();
+
+/**
+ * The names that you have nominated
+ */
+let _myNominations = [];
 
 /**
  * An array of all currently nominated pokemon
@@ -104,8 +109,8 @@ const _switch_to_rescind_button = (cardNominate) => {
  * UI helper to enable or disable downvote buttons
  */
 const _updateDownvoteButtonsUI = () => {
-	console.log(myVotes);
-	[...myVotes.entries()].forEach((entry) => {
+	console.log(_myVotes);
+	[..._myVotes.entries()].forEach((entry) => {
 		const [nomineeName, nomVotes] = entry;
 		const downvoteButton = document.getElementById(
 			`${nomineeName}_downvote`
@@ -124,7 +129,7 @@ const _updateDownvoteButtonsUI = () => {
  * UI helper to enable or disable upvote buttons
  */
 const _updateUpvoteButtonsUI = () => {
-	[...myVotes.entries()].forEach((entry) => {
+	[..._myVotes.entries()].forEach((entry) => {
 		const [nomineeName, _nomVotes] = entry;
 		const upvoteButton = document.getElementById(`${nomineeName}_upvote`);
 		if (votes <= 0) {
@@ -193,9 +198,19 @@ const sendUsername = () => {
 /**
  * Helper function that updates nominees to newNominees, and also adds any
  * new nominees to the website UI.
- * @param {newNominees: {name: string, votes: number, nominater: string}}} - an array of all current nominees
- */
+ * @param {
+* 		name: string, 
+* 		votes: number, 
+* 		nominater: { 
+* 			username?: string | undefined;
+* 			id: string;
+* 			nominations: number;
+* 			votes: number;
+* 		};
+* 	}[] - newNominees - An array of all the currently nominated nominees
+*/
 function updateNominees(newNominees) {
+	_myNominations = newNominees.filter(nominee => nominee.nominater.id === id).map(nominee => nominee.name)
 	// nomination occurred
 	if (nominees.length <= newNominees.length) {
 		newNominees.forEach((newNom) => {
@@ -203,9 +218,9 @@ function updateNominees(newNominees) {
 				(nom) => nom.name === newNom.name
 			);
 			// update votes map to include new votable entry
-			const nomineeAlreadyVotable = myVotes.get(newNom.name);
+			const nomineeAlreadyVotable = _myVotes.get(newNom.name);
 			if (!nomineeAlreadyVotable) {
-				myVotes.set(newNom.name, 0);
+				_myVotes.set(newNom.name, 0);
 			}
 			if (alreadyNominated) {
 				// update votes on existing ui element
@@ -243,9 +258,9 @@ function updateNominees(newNominees) {
 				_updateNominateButtonFunctionalityForNominee(nom.name, false);
 			}
 			// remove from votes map as nominee is no longer votable
-			const nomineeAlreadyVotable = myVotes.get(nom.name);
+			const nomineeAlreadyVotable = _myVotes.get(nom.name);
 			if (nomineeAlreadyVotable) {
-				myVotes.delete(nom.name);
+				_myVotes.delete(nom.name);
 			}
 		});
 	}
@@ -654,6 +669,13 @@ function buildNominee(name, votes, nominater) {
 	nomineeNominater.innerText = `${nominater}`;
 	nomineeNominater.id = `${name}_nominater`;
 	nomineeNominater.classList.add("nominater");
+	const isMyNomination = _myNominations.some(myNom => myNom === name);
+	if (isMyNomination) {
+		upVoteButton.style.filter = "brightness(50%)";
+		downVoteButton.style.filter = "brightness(50%)";
+		upVoteButton.disabled = true
+		downVoteButton.disabled = true
+	}
 	nomineeNominaterContainer.appendChild(nomineeNominaterText);
 	nomineeNominaterContainer.appendChild(nomineeNominater);
 	voteButtonsContainer.appendChild(upVoteButton);
