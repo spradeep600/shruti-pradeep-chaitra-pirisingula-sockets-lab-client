@@ -106,6 +106,26 @@ const _switch_to_rescind_button = (cardNominate) => {
 };
 
 /**
+ * lol
+ */
+function fun() {
+	const wrapper = document.getElementsByClassName("wrapper")[0]
+	wrapper.remove();
+	const root = document.getElementsByTagName("body")[0];
+	root.style.backgroundImage = "none";
+	root.style.backgroundColor = "black";
+	root.style.backgroundImage = "none";
+	root.style.display = "flex";
+	root.style.justifyContent = "center";
+	root.style.alignItems = "center";
+	
+	const pTag = document.createElement("p");
+	pTag.innerText = "Nice Try";
+	pTag.style.color = "white";
+	root.appendChild(pTag);
+}
+
+/**
  * UI helper to enable or disable downvote buttons
  */
 const _updateDownvoteButtonsUI = () => {
@@ -376,6 +396,11 @@ function connect() {
 				}
 				case "HEARTBEAT" : {
 					_heartbeat = new Date().getTime();
+					break;
+				}
+				case "IP_SPAM" : {
+					fun();
+					break;
 				}
 			}
 		};
