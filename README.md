@@ -60,8 +60,6 @@ Here are all the functions you will need to write (or partially write):
 
 While developing, you'll often be refreshing your page. When connecting to the server by hitting hte "Join the Indigo League!" button, be patient, it may take a few seconds to connect.
 
-Also, sockets timeout and disconnect when 1 minute has passed without any events sent. This will probably happen to you, and simply refreshing the page should fix this.
-
 Lastly, you'll probably be debugging quite a bit when you work on this lab. To print any information in the code, write a `console.log("hello world")` anywhere you'd like. Then hit `CTRL + SHIFT + i` (On Windows), or `OPTION + ⌘ + J` (on Mac) to open up the developer tools. You should see a tab called `Console` in upper left. Click on it, and any `console.log()` calls you do will show up here.
 
 ## 1. Sending Events to the Server
