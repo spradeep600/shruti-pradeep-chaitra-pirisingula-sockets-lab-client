@@ -314,6 +314,17 @@ const updateNominationsRemainingUI = (newNominationsRemaining) => {
  */
 function voteForPokemon(pokemon, upvote) {
 	// your code goes here!
+	if(upvote == true && id != null && username.length > 0){
+		const eventDataToSendToServer3 = {type: "VOTE", candidate: pokemon, voter: id, upvote: true};
+		JSON.stringify(eventDataToSendToServer3);
+		console.log("vote true");
+	}
+	if(upvote == false && id != null && username.length > 0){
+		const eventDataToSendToServer4 = {type: "VOTE", candidate: pokemon, voter: id, upvote: false};
+		JSON.stringify(eventDataToSendToServer4);
+		console.log("vote false");
+	}
+
 }
 
 /**
@@ -324,6 +335,18 @@ function voteForPokemon(pokemon, upvote) {
  */
 function nominatePokemon(pokemon, nominate) {
 	// your code goes here!
+	if(nominate == true && id != null && username.length > 0){
+		const eventDataToSendToServer = {type: "NOMINATE", nominee: pokemon, nominator: id, unominate: false};
+		JSON.stringify(eventDataToSendToServer);
+		console.log("nominate true");
+
+	}
+	if(nominate == false && id != null && username.length > 0){
+		const eventDataToSendToServer2 = {type: "NOMINATE", nominee: pokemon, nominator: id, unominate: true};
+		JSON.stringify(eventDataToSendToServer2);
+		console.log("nominate false");
+	}
+	
 }
 
 /**
@@ -341,7 +364,7 @@ function connect() {
 		 * TODO: Write a line here opening a socket connection with the server, and assign
 		 * it to the socket variable!
 		 */
-
+		socket = new WebSocket(URL);
 		
 		// heartbeat functionality - do NOT touch! D:<
 		socket.onopen = () => {
@@ -375,6 +398,8 @@ function connect() {
 					 * TODO: Write logic here handling when the client
 					 * receives a "NOMINEES" event from the server
 					 */
+						updateNominees(eventData.nominees);
+						console.log("nominees event");
 					break;
 				}
 				case "UPDATE": {
@@ -382,6 +407,12 @@ function connect() {
 					 * TODO: Write logic here handling when the client
 					 * receives a "UPDATE" event from the server
 					 */
+					votes = eventData.votes;
+					updateVotesRemainingUI(eventData.votes);
+					nominations = eventData.nominations;
+					updateNominationsRemainingUI(eventData.nominations);
+					console.log("update event");
+
 					break;
 				}
 				case "GREET": {
