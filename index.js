@@ -313,18 +313,17 @@ const updateNominationsRemainingUI = (newNominationsRemaining) => {
  * @param {boolean} upvote - true if you are voting for the pokemon, false if voting against
  */
 function voteForPokemon(pokemon, upvote) {
-	// your code goes here!
-	if(upvote == true && id != null && username.length > 0){
-		const eventDataToSendToServer3 = {type: "VOTE", candidate: pokemon, voter: id, upvote: true};
-		JSON.stringify(eventDataToSendToServer3);
-		console.log("vote true");
-	}
-	if(upvote == false && id != null && username.length > 0){
-		const eventDataToSendToServer4 = {type: "VOTE", candidate: pokemon, voter: id, upvote: false};
-		JSON.stringify(eventDataToSendToServer4);
-		console.log("vote false");
-	}
-
+    // your code goes here!
+    if (username && id) {
+        socket.send(JSON.stringify(
+            {
+                type: "VOTE",
+                candidate: pokemon,
+                voter: id,
+                upvote: upvote
+            }
+        ));
+    }
 }
 
 /**
@@ -334,19 +333,17 @@ function voteForPokemon(pokemon, upvote) {
  * @param {boolean} nominate - whether the user is nominating or unnominating the pokemon
  */
 function nominatePokemon(pokemon, nominate) {
-	// your code goes here!
-	if(nominate == true && id != null && username.length > 0){
-		const eventDataToSendToServer = {type: "NOMINATE", nominee: pokemon, nominator: id, unominate: false};
-		JSON.stringify(eventDataToSendToServer);
-		console.log("nominate true");
-
-	}
-	if(nominate == false && id != null && username.length > 0){
-		const eventDataToSendToServer2 = {type: "NOMINATE", nominee: pokemon, nominator: id, unominate: true};
-		JSON.stringify(eventDataToSendToServer2);
-		console.log("nominate false");
-	}
-	
+    // your code goes here!
+    if (username && id) {
+        socket.send(JSON.stringify(
+            {
+                type: "NOMINATE",
+                nominee: pokemon,
+                nominater: id,
+                unnominate: !nominate
+            }
+        ));
+    }
 }
 
 /**
@@ -407,11 +404,19 @@ function connect() {
 					 * TODO: Write logic here handling when the client
 					 * receives a "UPDATE" event from the server
 					 */
-					votes = eventData.votes;
-					updateVotesRemainingUI(eventData.votes);
-					nominations = eventData.nominations;
-					updateNominationsRemainingUI(eventData.nominations);
-					console.log("update event");
+					
+                    username = eventData.user.username;
+                    id = eventData.user.id;
+                    
+                    votes = eventData.user.votes;
+                    
+                    updateVotesRemainingUI(votes);
+                    
+                    nominations = eventData.user.nominations;
+                    
+                    updateNominationsRemainingUI(nominations);
+                    
+					sendUsername();
 
 					break;
 				}
